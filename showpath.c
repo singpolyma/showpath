@@ -8,6 +8,7 @@ static char *types[]={"exec","man",NULL};
 static char *envs[]={"PATH","MANPATH",NULL};
 static char *envname="PATH";
 
+/* stores argv[0] for use in shortusage */
 static char *myname;
 
 /* ugly globals */
@@ -15,6 +16,9 @@ char **entries = NULL;
 size_t num = 0;
 size_t max = 0;
 
+/* Takes a char**, the number of elements in the buffer,
+ * and the current buffer maxsize, and grows if necessary.
+ */
 char **grow(char **entries, size_t num, size_t *max)
 {
 	if(num >= *max)
@@ -32,6 +36,10 @@ char **grow(char **entries, size_t num, size_t *max)
 	return entries;
 }
 
+/* Pushes new to the end of the global entries if new is 
+ * not already contained in entries.
+ * Grows the buffer if necessary.
+ */
 int add_entry(const char *new)
 {
 	size_t i;
@@ -51,6 +59,9 @@ int add_entry(const char *new)
 	return 0;
 }
 
+/* Set the global envname based on predefined types.
+ * Used for -t switch.
+ */
 int set_type(const char *type)
 {
 	size_t i = -1;
@@ -66,6 +77,9 @@ int set_type(const char *type)
 	return 1;
 }
 
+/* Parse values out of an environment variable and push them into
+ * entries.
+ */
 int add_from_env(char* env_var)
 {
 	const char *pp=getenv(env_var);
@@ -168,6 +182,9 @@ int main(int argc,char **argv)
 			return EXIT_FAILURE;
 		}
 	}
+
+	/* These lines allow us to tread argc and argv as though 
+    * any switches were not there */
 	argc-=optind;
 	argv+=optind;
 
