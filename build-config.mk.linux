@@ -1,0 +1,5 @@
+TARGET=unix
+SUBTARGET=linux
+
+CC=gcc
+CFLAGS=-W -Wall -ansi -pedantic -O -D_BSD_SOURCE -D_XOPEN_SOURCE

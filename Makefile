@@ -1,3 +1,3 @@
-all: showpath
+include build-config.mk
 
-CFLAGS=-W -Wall -ansi -pedantic -O
+all: showpath

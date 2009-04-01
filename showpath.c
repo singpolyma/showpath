@@ -22,11 +22,6 @@ void grow(void)
 	}
 }
 
-/*strdup is *nix, and glibc with gcc -ansi -pedantic doesn't give a
-    declaration for it.
-*/
-char *strdup(const char *s);
-
 int add_entry(const char *new)
 {
 	size_t i;

@@ -1,0 +1,5 @@
+TARGET=unix
+SUBTARGET=osx
+
+CC=gcc
+CFLAGS=-W -Wall -ansi -pedantic -O
