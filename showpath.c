@@ -97,9 +97,14 @@ int add_path(void)
 
 static char *myname;
 
-void usage(void)
+void shortusage(void)
 {
 	printf("Usage: %s [-t type] [-v env_name] path-entry ...\n",myname);
+}
+
+void usage(void)
+{
+	shortusage();
 	printf("  Outputs a path containing all path-entries on the command line, in\n");
 	printf("    the order given, with duplicates removed.\n");
 	printf("  Known types are 'exec' (for $PATH) and 'man' (for $MANPATH).\n");
@@ -122,14 +127,14 @@ int main(int argc,char **argv)
 		case 't':
 			if(have_type)
 			{
-				fprintf(stderr,"Only one '-t' or '-v' allowed!\n");
-				usage();
+				fprintf(stderr,"%s: Only one '-t' or '-v' allowed!\n",myname);
+				shortusage();
 				return EXIT_FAILURE;
 			}
 			if(set_type(optarg))
 			{
-				fprintf(stderr,"Unknown type '%s'!\n",optarg);
-				usage();
+				fprintf(stderr,"%s: Unknown type '%s'!\n",myname,optarg);
+				shortusage();
 				return EXIT_FAILURE;
 			}
 			have_type=1;
@@ -137,19 +142,21 @@ int main(int argc,char **argv)
 		case 'v':
 			if(have_type)
 			{
-				fprintf(stderr,"Only one '-t' or '-v' allowed!\n");
-				usage();
+				fprintf(stderr,"%s: Only one '-t' or '-v' allowed!\n",myname);
+				shortusage();
 				return EXIT_FAILURE;
 			}
 			envname=optarg;
 			have_type=1;
 			break;
 		case ':':
-			fprintf(stderr,"Option '%c' requires an argument\n",optopt);
-			usage();
+			fprintf(stderr,"%s: Option '%c' requires an argument\n",myname,optopt);
+			shortusage();
 			return EXIT_FAILURE;
 		case '?':
-			fprintf(stderr,"Unrecognized option: %c\n",optopt);
+			fprintf(stderr,"%s: Unrecognized option: %c\n",myname,optopt);
+			shortusage();
+			return EXIT_FAILURE;
 		default:
 			usage();
 			return EXIT_FAILURE;
