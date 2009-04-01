@@ -65,12 +65,17 @@ int add_path(void)
 {
 	const char *pp=getenv(envname);
 	char *p,*q;
+
 	if(!pp)
 	{
-		perror("getenv: can't get $PATH");
-		return -1;
+		/*This isn't actually an error, it just means we have
+		    an empty expansion for %current.
+		  So silently continue with anything else we want to throw in.
+		*/
+		return 0;
 	}
-	/*getenv doesn't necessarily give us a string we can modify*/
+
+	/*getenv doesn't give us a string we can modify*/
 	p=strdup(pp);
 	if(!p)
 	{
