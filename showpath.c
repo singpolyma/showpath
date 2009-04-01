@@ -4,9 +4,8 @@
 
 #include <unistd.h>	/*for getopt*/
 
-static char *types[]={"exec","man"};
-static char *envs[]={"PATH","MANPATH"};
-static size_t num_envs=2;
+static char *types[]={"exec","man",NULL};
+static char *envs[]={"PATH","MANPATH",NULL};
 static char *envname="PATH";
 
 static char *myname;
@@ -54,8 +53,8 @@ int add_entry(const char *new)
 
 int set_type(const char *type)
 {
-	size_t i;
-	for(i=0;i<num_envs;i++)
+	size_t i = -1;
+	while(types[++i])
 	{
 		if(strcmp(types[i],type)==0)
 		{
