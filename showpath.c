@@ -12,21 +12,23 @@ static char *envname="PATH";
 static char *myname;
 
 /* ugly globals */
-char **entries;
-size_t num,max;
+char **entries = NULL;
+size_t num = 0;
+size_t max = 0;
 
 void grow(void)
 {
 	if(num >= max)
 	{
-		void *t=realloc(entries,2*max*sizeof *entries);
+		void *t;
+		max = 2*(max+1);
+		t=realloc(entries,max*sizeof *entries);
 		if(!t)
 		{
 			perror("realloc");
 			exit(EXIT_FAILURE);
 		}
 		entries=t;
-		max*=2;
 	}
 }
 
@@ -174,14 +176,6 @@ int main(int argc,char **argv)
 		usage();
 		return 0;
 	}
-
-	entries=malloc(sizeof *entries);
-	if(!entries)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	max=1;
 
 	for(i=0;i<argc;i++)
 	{
