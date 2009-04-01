@@ -92,6 +92,8 @@ int add_path(void)
 		q=strtok(NULL,":");
 	}
 
+	free(p);
+
 	return 0;
 }
 
