@@ -1,0 +1,12 @@
+Features/bugfixes:  See list in manpage
+
+Documentation:
+-Turn manpage into a proper man page instead of an ASCII-formated
+  pseudo-manpage
+-Create sample config files (blocked on adding config file functionality)
+-Possibly make user manual with more information on motivation and
+    use cases to supplement man page?
+
+Code cleanup:
+-Make envname local to main / arg to add_path instead of being global
+  (Along with this, we can make the type table local to set_type.)

@@ -91,7 +91,21 @@ TO DO
         to force the new stuff added by a (presumably not your)
         setup script to go to the end of the path.)
 
+    This section only lists desired features.  For to-do items other than
+    feature requests (this section) and bugfixes (next section), see the
+    TODO file in the source repository.
+
+    Send new feature requests to <dj3vande@eskimo.com>.
+
 
 BUGS
     '-v' does not control verbosity; this may confuse users, and
     therefore may be changed at some point in the future.
+
+    Empty entries in the environment variable are (incorrectly)
+    discarded by strtok when breaking down the environment string.
+    If you really want an empty path entry, give yourself a whack
+    with the cluestick and then say 'showpath %current ""'.
+
+    Send new bug reports to <dj3vande@eskimo.com>.
+
