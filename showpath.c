@@ -16,13 +16,13 @@ char **entries = NULL;
 size_t num = 0;
 size_t max = 0;
 
-void grow(void)
+char **grow(char **entries, size_t num, size_t *max)
 {
-	if(num >= max)
+	if(num >= *max)
 	{
 		void *t;
-		max = 2*(max+1);
-		t=realloc(entries,max*sizeof *entries);
+		*max = 2*(*max+1);
+		t=realloc(entries,*max*sizeof *entries);
 		if(!t)
 		{
 			perror("realloc");
@@ -30,6 +30,7 @@ void grow(void)
 		}
 		entries=t;
 	}
+	return entries;
 }
 
 int add_entry(const char *new)
@@ -40,7 +41,7 @@ int add_entry(const char *new)
 		if(strcmp(entries[i],new)==0)
 			return 0;
 
-	grow();
+	entries = grow(entries, num, &max);
 	entries[num]=strdup(new);
 	if(!entries[num])
 	{
