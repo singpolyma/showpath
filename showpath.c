@@ -64,9 +64,9 @@ int set_type(const char *type)
 	return 1;
 }
 
-int add_path(void)
+int add_from_env(char* env_var)
 {
-	const char *pp=getenv(envname);
+	const char *pp=getenv(env_var);
 	char *p,*q;
 
 	if(!pp)
@@ -80,6 +80,7 @@ int add_path(void)
 
 	/*getenv doesn't give us a string we can modify*/
 	p=strdup(pp);
+
 	if(!p)
 	{
 		perror("strdup");
@@ -186,7 +187,7 @@ int main(int argc,char **argv)
 	{
 		int ret;
 		if(strcmp(argv[i],"%current")==0)
-			ret=add_path();
+			ret=add_from_env(envname);
 		else
 			ret=add_entry(argv[i]);
 		if(ret)
