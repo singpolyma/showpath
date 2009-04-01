@@ -4,6 +4,14 @@
 
 #include <unistd.h>	/*for getopt*/
 
+static char *types[]={"exec","man"};
+static char *envs[]={"PATH","MANPATH"};
+static size_t num_envs=2;
+static char *envname="PATH";
+
+static char *myname;
+
+/* ugly globals */
 char **entries;
 size_t num,max;
 
@@ -40,11 +48,6 @@ int add_entry(const char *new)
 	num++;
 	return 0;
 }
-
-static char *types[]={"exec","man"};
-static char *envs[]={"PATH","MANPATH"};
-static size_t num_envs=2;
-static char *envname="PATH";
 
 int set_type(const char *type)
 {
@@ -94,8 +97,6 @@ int add_path(void)
 
 	return 0;
 }
-
-static char *myname;
 
 void shortusage(void)
 {
