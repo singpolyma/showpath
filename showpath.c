@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <unistd.h>	/*for getopt*/
+
 char **entries;
 size_t num,max;
 
@@ -44,9 +46,29 @@ int add_entry(const char *new)
 	return 0;
 }
 
+static char *types[]={"exec","man"};
+static char *envs[]={"PATH","MANPATH"};
+static size_t num_envs=2;
+static char *envname="PATH";
+
+int set_type(const char *type)
+{
+	size_t i;
+	for(i=0;i<num_envs;i++)
+	{
+		if(strcmp(types[i],type)==0)
+		{
+			envname=envs[i];
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
 int add_path(void)
 {
-	const char *pp=getenv("PATH");
+	const char *pp=getenv(envname);
 	char *p,*q;
 	if(!pp)
 	{
@@ -73,16 +95,72 @@ int add_path(void)
 	return 0;
 }
 
+static char *myname;
+
+void usage(void)
+{
+	printf("Usage: %s [-t type] [-v env_name] path-entry ...\n",myname);
+	printf("  Outputs a path containing all path-entries on the command line, in\n");
+	printf("    the order given, with duplicates removed.\n");
+	printf("  Known types are 'exec' (for $PATH) and 'man' (for $MANPATH).\n");
+	printf("  The magic path-entry '%%current' expands to the current value from\n");
+	printf("    the environment.\n");
+}
+
 int main(int argc,char **argv)
 {
 	int i;
+	int opt;
+	int have_type=0;
 
-	if(argc<2)
+	myname=argv[0];
+
+	while((opt=getopt(argc,argv,":t:v:"))!=-1)
 	{
-		printf("Usage: %s path-entry ...\n",argv[0]);
-		printf("  Outputs a path containing all path-entries on the command line, in\n");
-		printf("    the order given, with duplicates removed.\n");
-		printf("  The magic path-entry '%%current' expands to the current value of $PATH.\n");
+		switch(opt)
+		{
+		case 't':
+			if(have_type)
+			{
+				fprintf(stderr,"Only one '-t' or '-v' allowed!\n");
+				usage();
+				return EXIT_FAILURE;
+			}
+			if(set_type(optarg))
+			{
+				fprintf(stderr,"Unknown type '%s'!\n",optarg);
+				usage();
+				return EXIT_FAILURE;
+			}
+			have_type=1;
+			break;
+		case 'v':
+			if(have_type)
+			{
+				fprintf(stderr,"Only one '-t' or '-v' allowed!\n");
+				usage();
+				return EXIT_FAILURE;
+			}
+			envname=optarg;
+			have_type=1;
+			break;
+		case ':':
+			fprintf(stderr,"Option '%c' requires an argument\n",optopt);
+			usage();
+			return EXIT_FAILURE;
+		case '?':
+			fprintf(stderr,"Unrecognized option: %c\n",optopt);
+		default:
+			usage();
+			return EXIT_FAILURE;
+		}
+	}
+	argc-=optind;
+	argv+=optind;
+
+	if(argc<1)
+	{
+		usage();
 		return 0;
 	}
 
@@ -94,7 +172,7 @@ int main(int argc,char **argv)
 	}
 	max=1;
 
-	for(i=1;i<argc;i++)
+	for(i=0;i<argc;i++)
 	{
 		int ret;
 		if(strcmp(argv[i],"%current")==0)
@@ -104,7 +182,7 @@ int main(int argc,char **argv)
 		if(ret)
 		{
 			fprintf(stderr,"%s: Adding path entry '%s' failed!\n",argv[0],argv[i]);
-			return EXIT_FAILURE;
+			exit(EXIT_FAILURE);
 		}
 	}
 
