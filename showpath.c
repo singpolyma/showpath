@@ -9,7 +9,7 @@ char **entries = NULL;
 size_t num = 0;
 size_t max = 0;
 
-/* stores argv[0] for use in shortusage */
+/* stores argv[0] for use in output */
 static char *myname;
 
 /* Takes a char**, the number of elements in the buffer,
@@ -32,8 +32,8 @@ char **grow(char **entries, size_t num, size_t *max)
 	return entries;
 }
 
-/* Pushes new to the end of the global entries if new is 
- * not already contained in entries.
+/* Appends new to the global list of entries if it is 
+ * not already in the list.
  * Grows the buffer if necessary.
  */
 int add_entry(const char *new)
@@ -135,7 +135,7 @@ int main(int argc,char **argv)
 	int i;
 	int opt;
 	int have_type=0;
-   char *envname="PATH";
+	char *envname="PATH";
 
 	myname=argv[0];
 
@@ -182,8 +182,9 @@ int main(int argc,char **argv)
 		}
 	}
 
-	/* These lines allow us to tread argc and argv as though 
-    * any switches were not there */
+	/* These lines allow us to treat argc and argv as though 
+	 * any switches were not there
+	 */
 	argc-=optind;
 	argv+=optind;
 
