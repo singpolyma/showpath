@@ -4,17 +4,13 @@
 
 #include <unistd.h>	/*for getopt*/
 
-static char *types[]={"exec","man",NULL};
-static char *envs[]={"PATH","MANPATH",NULL};
-static char *envname="PATH";
-
-/* stores argv[0] for use in shortusage */
-static char *myname;
-
 /* ugly globals */
 char **entries = NULL;
 size_t num = 0;
 size_t max = 0;
+
+/* stores argv[0] for use in shortusage */
+static char *myname;
 
 /* Takes a char**, the number of elements in the buffer,
  * and the current buffer maxsize, and grows if necessary.
@@ -62,14 +58,16 @@ int add_entry(const char *new)
 /* Set the global envname based on predefined types.
  * Used for -t switch.
  */
-int set_type(const char *type)
+int set_type(const char *type, char **envname)
 {
+	const char *types[]={"exec","man",NULL};
+	char *envs[]={"PATH","MANPATH",NULL};
 	size_t i = -1;
 	while(types[++i])
 	{
 		if(strcmp(types[i],type)==0)
 		{
-			envname=envs[i];
+			*envname=envs[i];
 			return 0;
 		}
 	}
@@ -137,6 +135,7 @@ int main(int argc,char **argv)
 	int i;
 	int opt;
 	int have_type=0;
+   char *envname="PATH";
 
 	myname=argv[0];
 
@@ -151,7 +150,7 @@ int main(int argc,char **argv)
 				shortusage();
 				return EXIT_FAILURE;
 			}
-			if(set_type(optarg))
+			if(set_type(optarg, &envname))
 			{
 				fprintf(stderr,"%s: Unknown type '%s'!\n",myname,optarg);
 				shortusage();
