@@ -78,10 +78,12 @@ int set_type(const char *type, char **envname)
 /* Parse values out of an environment variable and push them into
  * entries.
  */
-int add_from_env(char* env_var)
+int add_from_env(char* env_var, char sep)
 {
 	const char *pp=getenv(env_var);
 	char *p,*q;
+	char seperator[2];
+	sprintf(seperator, "%c", sep);
 
 	if(!pp)
 	{
@@ -101,13 +103,13 @@ int add_from_env(char* env_var)
 		fprintf(stderr, "Failed getting $%s!\n", env_var);
 		return -1;
 	}
-	q=strtok(p,":");
+	q=strtok(p,seperator);
 	while(q)
 	{
 		int ret=add_entry(q);
 		if(ret)
 			return ret;
-		q=strtok(NULL,":");
+		q=strtok(NULL,seperator);
 	}
 
 	free(p);
@@ -136,10 +138,11 @@ int main(int argc,char **argv)
 	int opt;
 	int have_type=0;
 	char *envname="PATH";
+	char sep = ':';
 
 	myname=argv[0];
 
-	while((opt=getopt(argc,argv,":t:v:"))!=-1)
+	while((opt=getopt(argc,argv,":t:v:s:"))!=-1)
 	{
 		switch(opt)
 		{
@@ -167,6 +170,9 @@ int main(int argc,char **argv)
 			}
 			envname=optarg;
 			have_type=1;
+			break;
+		case 's':
+			sep = optarg[0];
 			break;
 		case ':':
 			fprintf(stderr,"%s: Option '%c' requires an argument\n",myname,optopt);
@@ -198,7 +204,7 @@ int main(int argc,char **argv)
 	{
 		int ret;
 		if(strcmp(argv[i],"%current")==0)
-			ret=add_from_env(envname);
+			ret=add_from_env(envname, sep);
 		else
 			ret=add_entry(argv[i]);
 		if(ret)
@@ -213,7 +219,7 @@ int main(int argc,char **argv)
 		size_t idx;
 		printf("%s",entries[0]);
 		for(idx=1;idx<num;idx++)
-			printf(":%s",entries[idx]);
+			printf("%c%s",sep,entries[idx]);
 		printf("\n");
 	}
 

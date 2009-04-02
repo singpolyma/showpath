@@ -29,9 +29,6 @@ Features:
   bin directories if they exist, without cluttering up $PATH
   if they don't.)
 
--Make the path separator configurable
-  (Windows likes to use ';')
-
 -Split command-line args on separator instead of treating argv[i] as
   a single word
   (This would allow a use case like:
