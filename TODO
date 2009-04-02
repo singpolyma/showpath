@@ -7,6 +7,10 @@ Bugfixes:
 	See BUGS section of manpage.
 
 Features:
+-Allow deprioritizing an item.
+  showpath ~/bin %current moves it to the front if it's already there
+  showpath %current ~/bin should move it to the end
+
 -Add configurable short names
   (e.g. we should be able to create a config file for a Mac
   installation so that 'showpath -tman %fink %current' outputs
