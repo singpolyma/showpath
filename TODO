@@ -10,6 +10,17 @@ Features:
 -Allow deprioritizing an item.
   showpath ~/bin %current moves it to the front if it's already there
   showpath %current ~/bin should move it to the end
+ Dave's thoughts:
+ I've been bouncing around the idea of having a magic prefix to
+  REMOVE an entry.  ('-' is an obvious magic prefix in terms of
+  mapping meaning of symbols to semantics, except that it's already
+  the option prefix, and overloading it would be both confusing and
+  difficult to implement.)
+ If the remove is done in-order on the walk through the command
+  line, deprioritizing could then be done by saying
+    showpath %current -~/bin ~/bin
+  (remove ~/bin from current (silently ignore if it's not there),
+  then add it after what's left).
 
 -Add configurable short names
   (e.g. we should be able to create a config file for a Mac
