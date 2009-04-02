@@ -55,34 +55,20 @@ int add_entry(const char *new)
 	return 0;
 }
 
-/* Parse values out of an environment variable and push them into
- * entries.
+/* Parse values out of a string and add them to entries.
  */
-int add_from_env(char* env_var, char sep)
+int add_list(const char *list,char sep)
 {
-	const char *pp=getenv(env_var);
-	char *p,*q;
+	char *p=strdup(list);
+	char *q;
 	char seperator[2];
 
-	separator[0]=sep;
-	separator[1]='\0';
-
-	if(!pp)
-	{
-		/*This isn't actually an error, it just means we have
-		    an empty expansion for %current.
-		  So silently continue with anything else we want to throw in.
-		*/
-		return 0;
-	}
-
-	/*getenv doesn't give us a string we can modify*/
-	p=strdup(pp);
+	seperator[0]=sep;
+	seperator[1]='\0';
 
 	if(!p)
 	{
 		perror("strdup");
-		fprintf(stderr, "Failed getting $%s!\n", env_var);
 		return -1;
 	}
 	q=strtok(p,seperator);
@@ -97,6 +83,25 @@ int add_from_env(char* env_var, char sep)
 	free(p);
 
 	return 0;
+}
+
+/* Look up an environment variable and add its contents to
+ * entries.
+ */
+int add_from_env(char* env_var, char sep)
+{
+	const char *p=getenv(env_var);
+
+	if(!p)
+	{
+		/*This isn't actually an error, it just means we have
+		    an empty expansion for %current.
+		  So silently continue with anything else we want to throw in.
+		*/
+		return 0;
+	}
+
+	return add_list(p,sep);
 }
 
 /* Set the global envname based on predefined types.
@@ -214,9 +219,13 @@ int main(int argc,char **argv)
 		if(strcmp(argv[i],"%current")==0)
 			ret=add_from_env(envname, sep);
 		else
-			ret=add_entry(argv[i]);
+			ret=add_list(argv[i],sep);
 		if(ret)
 		{
+			/*XXX This will get ugly if we have a long path
+			    on the command line.  Is there a better way
+			    to handle that?   --DV
+			*/
 			fprintf(stderr,"%s: Adding path entry '%s' failed!\n",argv[0],argv[i]);
 			exit(EXIT_FAILURE);
 		}

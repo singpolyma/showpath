@@ -43,12 +43,3 @@ Features:
   %home %current`' and automagically get personal arch-specific
   bin directories if they exist, without cluttering up $PATH
   if they don't.)
-
--Split command-line args on separator instead of treating argv[i] as
-  a single word
-  (This would allow a use case like:
-			oldpath=$PATH
-			. /path/to/some/setup/script
-			PATH=`showpath $oldpath %current`
-  to force the new stuff added by a (presumably not your)
-  setup script to go to the end of the path.)

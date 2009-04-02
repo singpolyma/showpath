@@ -13,9 +13,15 @@ to stdout.  The string is constructed by combining the path
 entries given on the command line, in order, with duplicates
 pruned.
 .P
-The magic path_entry '%current' is expanded to the current
-entries in the path (taken from the environment), in the order
-they appear in the environment.
+Every path_entry is treated as a fragment of a path and is broken
+down into its constituent parts by splitting at the separators;
+these parts will be added (subject to duplicate pruning) independently.
+(This will do The Right Thing with entries without separators, but
+see BUGS below.)
+.P
+The magic path_entry '%current' is expanded to the current value
+of the path (taken from the environment), before splitting at
+separators.
 
 .SH OPTIONS
 .TP
@@ -63,14 +69,25 @@ export C_INCLUDE_PATH LIBRARY_PATH
 Tells gcc to use header and library files from Macports,
 without clobbering existing values of the environment
 variables used.
+.PD
+.P
+.PD 0
+oldpath="$PATH"
+.P
+source /path/to/setup/script
+.TP
+PATH="`showpath "$oldpath" %current`"
+Invokes a setup script that adds entries to $PATH, but forces new
+entries to go at the end instead of the beginning.
+.PD
 
 .SH BUGS
 \-v does not control verbosity; this may confuse users, and
 therefore may be changed at some point in the future.
 
-Empty entries in the environment variable are (incorrectly)
-discarded by strtok when breaking down the environment string.
-If you really want an empty path entry, give yourself a whack
-with the cluestick and then say 'showpath %current ""'.
+Empty entries are discarded by strtok when breaking down the string
+into its constituent parts.
+If you really want an empty path entry, give yourself a whack with
+the cluestick and then say 'PATH="`showpath %current`":'.
 
 Send new bug reports to <dj3vande@eskimo.com>.
