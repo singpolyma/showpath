@@ -83,7 +83,9 @@ int add_from_env(char* env_var, char sep)
 	const char *pp=getenv(env_var);
 	char *p,*q;
 	char seperator[2];
-	sprintf(seperator, "%c", sep);
+
+	separator[0]=sep;
+	separator[1]='\0';
 
 	if(!pp)
 	{
@@ -172,6 +174,12 @@ int main(int argc,char **argv)
 			have_type=1;
 			break;
 		case 's':
+			if(optarg[1])
+			{
+				fprintf(stderr,"%s: Separator must be a single character!\n",myname);
+				shortusage();
+				return EXIT_FAILURE;
+			}
 			sep = optarg[0];
 			break;
 		case ':':
