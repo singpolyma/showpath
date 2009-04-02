@@ -4,7 +4,10 @@ Documentation:
     use cases to supplement man page?
 -Create a COPYING file
 
-Features/bugfixes:
+Bugfixes:
+	See BUGS section of manpage.
+
+Features:
 -Add configurable short names
   (e.g. we should be able to create a config file for a Mac
   installation so that 'showpath -tman %fink %current' outputs
@@ -16,11 +19,11 @@ Features/bugfixes:
 -Add capability to prune directories that do not exist
   (combined with the above to-do items, this will let the
   system config specify something like
-			 type exec
-			 {
-				  home = ~/bin;
-				  home = ~/bin-SunOS;
-			 }
+		type exec
+		{
+			home = ~/bin;
+			home = ~/bin-SunOS;
+		}
   which allows users who have home directories shared between
   machines with different architectures to say 'PATH=`showpath
   %home %current`' and automagically get personal arch-specific
@@ -33,14 +36,8 @@ Features/bugfixes:
 -Split command-line args on separator instead of treating argv[i] as
   a single word
   (This would allow a use case like:
-			 oldpath=$PATH
-			 . /path/to/some/setup/script
-			 PATH=`showpath $oldpath %current`
+			oldpath=$PATH
+			. /path/to/some/setup/script
+			PATH=`showpath $oldpath %current`
   to force the new stuff added by a (presumably not your)
   setup script to go to the end of the path.)
-
-This section only lists desired features.  For to-do items other than
-feature requests (this section) and bugfixes (next section), see the
-TODO file in the source repository.
-
-Send new feature requests to <dj3vande@eskimo.com>.
