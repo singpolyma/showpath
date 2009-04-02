@@ -1,0 +1,72 @@
+.TH showpath 1
+
+.SH NAME
+showpath \- manageable edit path
+
+.SH SYNOPSIS
+.B showpath
+[\-t type | \-v ENV_NAME] path_entry ...
+
+.SH DESCRIPTION
+The showpath tool writes a string suitable for use as a path
+to stdout.  The string is constructed by combining the path
+entries given on the command line, in order, with duplicates
+pruned.
+.P
+The magic path_entry '%current' is expanded to the current
+entries in the path (taken from the environment), in the order
+they appear in the environment.
+
+.SH OPTIONS
+.TP
+.B \-t type
+Specifies a pre-configured path type.
+
+Valid types are currently compiled in; making them
+configurable (by system and/or user configuration
+files) is on the to-do list.
+
+Currently known types are:
+    exec    (for $PATH)
+    man     (for $MANPATH)
+
+The -t option currently only provides a shorthand for
+an equivalent use of the -v option.  Adding short names
+for sets of path entries is on the to-do list; when
+this happens, specifying a type will also select a set
+of short names based on the type.
+.TP
+.B \-v ENV_NAME
+Specifies an environment variable name to look up for
+the expansion of '%current'.
+.P
+The -t and -v options are mutually exclusive, and at most
+one of either can be specified.  Specifying neither is
+equivalent to specifying '-t exec'.
+
+.SH EXAMPLES
+.TP
+PATH="`showpath ~/bin %current`"
+Puts $HOME/bin at the beginning of $PATH, or moves it to
+the beginning if it's already in there somewhere.
+.P
+.PD 0
+C_INCLUDE_PATH="`showpath -vC_INCLUDE_PATH %current /opt/local/include`"
+.P
+LIBRARY_PATH="`showpath -vLIBRARY_PATH %current /opt/local/lib`"
+.TP
+export C_INCLUDE_PATH LIBRARY_PATH
+Tells gcc to use header and library files from Macports,
+without clobbering existing values of the environment
+variables used.
+
+.SH BUGS
+\-v does not control verbosity; this may confuse users, and
+therefore may be changed at some point in the future.
+
+Empty entries in the environment variable are (incorrectly)
+discarded by strtok when breaking down the environment string.
+If you really want an empty path entry, give yourself a whack
+with the cluestick and then say 'showpath %current ""'.
+
+Send new bug reports to <dj3vande@eskimo.com>.
