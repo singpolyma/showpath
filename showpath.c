@@ -55,26 +55,6 @@ int add_entry(const char *new)
 	return 0;
 }
 
-/* Set the global envname based on predefined types.
- * Used for -t switch.
- */
-int set_type(const char *type, char **envname)
-{
-	const char *types[]={"exec","man",NULL};
-	char *envs[]={"PATH","MANPATH",NULL};
-	size_t i = -1;
-	while(types[++i])
-	{
-		if(strcmp(types[i],type)==0)
-		{
-			*envname=envs[i];
-			return 0;
-		}
-	}
-
-	return 1;
-}
-
 /* Parse values out of an environment variable and push them into
  * entries.
  */
@@ -117,6 +97,26 @@ int add_from_env(char* env_var, char sep)
 	free(p);
 
 	return 0;
+}
+
+/* Set the global envname based on predefined types.
+ * Used for -t switch.
+ */
+int set_type(const char *type, char **envname)
+{
+	const char *types[]={"exec","man",NULL};
+	char *envs[]={"PATH","MANPATH",NULL};
+	size_t i = -1;
+	while(types[++i])
+	{
+		if(strcmp(types[i],type)==0)
+		{
+			*envname=envs[i];
+			return 0;
+		}
+	}
+
+	return 1;
 }
 
 void shortusage(void)
