@@ -98,7 +98,7 @@ int add_from_env(char* env_var)
 	if(!p)
 	{
 		perror("strdup");
-		fputs("Failed getting $PATH!\n",stderr);
+		fprintf(stderr, "Failed getting $%s!\n", env_var);
 		return -1;
 	}
 	q=strtok(p,":");
