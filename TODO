@@ -2,6 +2,7 @@ Documentation:
 -Create sample config files (blocked on adding config file functionality)
 -Possibly make user manual with more information on motivation and
     use cases to supplement man page?
+-Create a COPYING file
 
 Features/bugfixes:
 -Add configurable short names
