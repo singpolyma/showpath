@@ -121,7 +121,7 @@ int add_from_env(char* env_var, char sep)
 
 void shortusage(void)
 {
-	printf("Usage: %s [-t type] [-v env_name] path-entry ...\n",myname);
+	printf("Usage: %s [-t type | -v env_name] [-s separator ] path-entry ...\n",myname);
 }
 
 void usage(void)
