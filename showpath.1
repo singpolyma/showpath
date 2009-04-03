@@ -69,7 +69,9 @@ and
 .Fl v
 options are mutually exclusive, and at most one of either can be specified.
 Specifying neither is equivalent to specifying
+.Bk -words
 .Fl t Li exec .
+.Ek
 .Sh FILES
 None yet.
 .Sh EXAMPLES
@@ -111,7 +113,9 @@ Empty entries are discarded by strtok when breaking down the string
 into its constituent parts.
 If you really want an empty path entry, give yourself a whack with
 the cluestick and then say
+.Bk -words
 .Ql PATH="\*(gashowpath %current\*(ga:" .
+.Ek
 .Pp
 Send new bug reports to 
 .Aq dj3vande@eskimo.com .
