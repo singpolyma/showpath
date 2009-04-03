@@ -11,9 +11,9 @@
 .Ar path_entry ...
 .Sh DESCRIPTION
 The showpath tool writes a string suitable for use as a path
-to stdout.  The string is constructed by combining the path
-entries given on the command line, in order, with duplicates
-pruned.
+to stdout.
+The string is constructed by combining the path entries given on
+the command line, in order, with duplicates pruned.
 .Pp
 Every path_entry is treated as a fragment of a path and is broken
 down into its constituent parts by splitting at the separators;
@@ -53,9 +53,10 @@ The
 .Fl t
 option currently only provides a shorthand for an equivalent use of the
 .Fl v
-option.  Adding short names for sets of path entries is a feature
-scheduled for implementation in the near future; when this happens,
-specifying a type will also select a set of short names based on the type.
+option.
+Adding short names for sets of path entries is a feature scheduled
+for implementation in the near future; when this happens, specifying
+a type will also select a set of short names based on the type.
 .It Fl v Ar ENV_NAME
 Specifies an environment variable name to look up for the expansion of
 .Li %current .
