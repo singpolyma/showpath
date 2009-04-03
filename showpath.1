@@ -24,7 +24,7 @@ see
 below.)
 .Pp
 The magic path_entry
-.Li %current
+.Ql %current
 is expanded to the current value of the path (taken from the environment),
 before splitting at separators.
 .Pp
@@ -32,7 +32,8 @@ The following options are available:
 .Bl -tag -offset indent
 .It Fl s Ar separator
 Specifies the path separator.
-The separator must be a single character and defaults to ':'.
+The separator must be a single character and defaults to
+.Ql \&: .
 .It Fl t Ar type
 Specifies a pre-configured path type.
 Valid types are currently compiled in; making them configurable (by system
@@ -43,10 +44,10 @@ Currently known types are:
 .Bl -tag -compact
 .It Li exec
 (for
-.Li $PATH )
+.Ev $PATH )
 .It Li man
 (for
-.Li $MANPATH )
+.Ev $MANPATH )
 .El
 .Pp
 The
@@ -59,7 +60,7 @@ for implementation in the near future; when this happens, specifying
 a type will also select a set of short names based on the type.
 .It Fl v Ar ENV_NAME
 Specifies an environment variable name to look up for the expansion of
-.Li %current .
+.Ql %current .
 .El
 .Pp
 The
@@ -73,9 +74,9 @@ Specifying neither is equivalent to specifying
 None yet.
 .Sh EXAMPLES
 Put
-.Li $HOME/bin
+.Pa ~/bin
 at the beginning of
-.Li $PATH ,
+.Ev $PATH ,
 or move it to the beginning if it's already in there somewhere:
 .Bd -literal -offset indent -compact
 PATH="\*(gashowpath ~/bin %current\*(ga"
@@ -90,8 +91,9 @@ LIBRARY_PATH="\*(gashowpath -vLIBRARY_PATH %current /opt/local/lib\*(ga"
 export C_INCLUDE_PATH LIBRARY_PATH
 .Ed
 .Pp
-Invoke a setup script that adds entries to $PATH, but force new
-entries to go at the end instead of the beginning:
+Invoke a setup script that adds entries to
+.Ev $PATH ,
+but force new entries to go at the end instead of the beginning:
 .Bd -literal -offset indent -compact
 oldpath="$PATH"
 \&. /path/to/setup/script
@@ -109,7 +111,7 @@ Empty entries are discarded by strtok when breaking down the string
 into its constituent parts.
 If you really want an empty path entry, give yourself a whack with
 the cluestick and then say
-.Li PATH="\*(gashowpath %current\*(ga:" .
+.Ql PATH="\*(gashowpath %current\*(ga:" .
 .Pp
 Send new bug reports to 
 .Aq dj3vande@eskimo.com .
