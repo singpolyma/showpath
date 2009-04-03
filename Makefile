@@ -1,6 +1,6 @@
 include build-config.mk
 
-.PHONY: all clean
+.PHONY: all clean doc
 
 all: showpath
 doc: showpath.pdf
@@ -11,4 +11,4 @@ showpath.pdf: showpath.ps
 	ps2pdf $< $@
 
 clean:
-	$(RM) *.o showpath
+	$(RM) *.o showpath showpath.ps showpath.pdf
