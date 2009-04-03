@@ -78,15 +78,15 @@ at the beginning of
 .Li $PATH ,
 or move it to the beginning if it's already in there somewhere:
 .Bd -literal -offset indent -compact
-PATH="`showpath ~/bin %current`"
+PATH="\*(gashowpath ~/bin %current\*(ga"
 .Ed
 .Pp
 Tell gcc to use header and library files from Macports,
 without clobbering existing values of the environment
 variables used:
 .Bd -literal -offset indent -compact
-C_INCLUDE_PATH="`showpath -vC_INCLUDE_PATH %current /opt/local/include`"
-LIBRARY_PATH="`showpath -vLIBRARY_PATH %current /opt/local/lib`"
+C_INCLUDE_PATH="\*(gashowpath -vC_INCLUDE_PATH %current /opt/local/include\*(ga"
+LIBRARY_PATH="\*(gashowpath -vLIBRARY_PATH %current /opt/local/lib\*(ga"
 export C_INCLUDE_PATH LIBRARY_PATH
 .Ed
 .Pp
@@ -95,7 +95,7 @@ entries to go at the end instead of the beginning:
 .Bd -literal -offset indent -compact
 oldpath="$PATH"
 \&. /path/to/setup/script
-PATH="`showpath "$oldpath" %current`"
+PATH="\*(gashowpath "$oldpath" %current\*(ga"
 .Ed
 .Sh AUTHORS
 .An "Dave Vandervies" Aq dj3vande@eskimo.com
@@ -109,7 +109,7 @@ Empty entries are discarded by strtok when breaking down the string
 into its constituent parts.
 If you really want an empty path entry, give yourself a whack with
 the cluestick and then say
-.Li PATH="`showpath %current`:" .
+.Li PATH="\*(gashowpath %current\*(ga:" .
 .Pp
 Send new bug reports to 
 .Aq dj3vande@eskimo.com .
