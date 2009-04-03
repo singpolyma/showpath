@@ -1,93 +1,115 @@
-.TH showpath 1
-
-.SH NAME
-showpath \- manageably edit path
-
-.SH SYNOPSIS
-.B showpath
-[\-t type | \-v ENV_NAME] [\-s separator] path_entry ...
-
-.SH DESCRIPTION
+.Dd April 1, 2009
+.Dt showpath 1 LOCAL
+.Os Generic Unix
+.Sh NAME
+.Nm showpath
+.Nd manageably edit path
+.Sh SYNOPSIS
+.Nm showpath
+.Op Fl t Ar type | Fl v Ar ENV_NAME
+.Op Fl s Ar separator
+.Ar path_entry ...
+.Sh DESCRIPTION
 The showpath tool writes a string suitable for use as a path
 to stdout.  The string is constructed by combining the path
 entries given on the command line, in order, with duplicates
 pruned.
-.P
+.Pp
 Every path_entry is treated as a fragment of a path and is broken
 down into its constituent parts by splitting at the separators;
 these parts will be added (subject to duplicate pruning) independently.
 (This will do The Right Thing with entries without separators, but
-see BUGS below.)
-.P
-The magic path_entry '%current' is expanded to the current value
-of the path (taken from the environment), before splitting at
-separators.
-
-.SH OPTIONS
-.TP
-.B \-s separator
+see
+.Sx BUGS
+below.)
+.Pp
+The magic path_entry
+.Li %current
+is expanded to the current value of the path (taken from the environment),
+before splitting at separators.
+.Pp
+The following options are available:
+.Bl -tag -offset indent
+.It Fl s Ar separator
 Specifies the path separator.
 The separator must be a single character and defaults to ':'.
-.TP
-.B \-t type
+.It Fl t Ar type
 Specifies a pre-configured path type.
-
-Valid types are currently compiled in; making them
-configurable (by system and/or user configuration
-files) is on the to-do list.
-
+Valid types are currently compiled in; making them configurable (by system
+and/or user configuration) is a feature scheduled for implementation in
+the near future.
+.Pp
 Currently known types are:
-    exec    (for $PATH)
-    man     (for $MANPATH)
-
-The -t option currently only provides a shorthand for
-an equivalent use of the -v option.  Adding short names
-for sets of path entries is on the to-do list; when
-this happens, specifying a type will also select a set
-of short names based on the type.
-.TP
-.B \-v ENV_NAME
-Specifies an environment variable name to look up for
-the expansion of '%current'.
-.P
-The -t and -v options are mutually exclusive, and at most
-one of either can be specified.  Specifying neither is
-equivalent to specifying '-t exec'.
-
-.SH EXAMPLES
-.TP
+.Pp
+.Bl -tag -offset indent -compact
+.It Li exec
+(for
+.Li $PATH )
+.It Li man
+(for
+.Li $MANPATH )
+.El
+.Pp
+The
+.Fl t
+option currently only provides a shorthand for an equivalent use of the
+.Fl v
+option.  Adding short names for sets of path entries is a feature
+scheduled for implementation in the near future; when this happens,
+specifying a type will also select a set of short names based on the type.
+.It Fl v Ar ENV_NAME
+Specifies an environment variable name to look up for the expansion of
+.Li %current .
+.El
+.Pp
+The
+.Fl t
+and
+.Fl v
+options are mutually exclusive, and at most one of either can be specified.
+Specifying neither is equivalent to specifying
+.Fl t Li exec .
+.Sh FILES
+None yet.
+.Sh EXAMPLES
+Put
+.Li $HOME/bin
+at the beginning of
+.Li $PATH ,
+or move it to the beginning if it's already in there somewhere:
+.Bd -literal -offset indent -compact
 PATH="`showpath ~/bin %current`"
-Puts $HOME/bin at the beginning of $PATH, or moves it to
-the beginning if it's already in there somewhere.
-.P
-.PD 0
-C_INCLUDE_PATH="`showpath -vC_INCLUDE_PATH %current /opt/local/include`"
-.P
-LIBRARY_PATH="`showpath -vLIBRARY_PATH %current /opt/local/lib`"
-.TP
-export C_INCLUDE_PATH LIBRARY_PATH
-Tells gcc to use header and library files from Macports,
+.Ed
+.Pp
+Tell gcc to use header and library files from Macports,
 without clobbering existing values of the environment
-variables used.
-.PD
-.P
-.PD 0
+variables used:
+.Bd -literal -offset indent -compact
+C_INCLUDE_PATH="`showpath -vC_INCLUDE_PATH %current /opt/local/include`"
+LIBRARY_PATH="`showpath -vLIBRARY_PATH %current /opt/local/lib`"
+export C_INCLUDE_PATH LIBRARY_PATH
+.Ed
+.Pp
+Invoke a setup script that adds entries to $PATH, but force new
+entries to go at the end instead of the beginning:
+.Bd -literal -offset indent -compact
 oldpath="$PATH"
-.P
-source /path/to/setup/script
-.TP
+\&. /path/to/setup/script
 PATH="`showpath "$oldpath" %current`"
-Invokes a setup script that adds entries to $PATH, but forces new
-entries to go at the end instead of the beginning.
-.PD
-
-.SH BUGS
-\-v does not control verbosity; this may confuse users, and
+.Ed
+.Sh AUTHORS
+.An "Dave Vandervies" Aq dj3vande@eskimo.com
+.An "Stephen Paul Weber" Aq singpolyma@singpolyma.net
+.Sh BUGS
+.Fl v
+does not control verbosity; this may confuse users, and
 therefore may be changed at some point in the future.
-
+.Pp
 Empty entries are discarded by strtok when breaking down the string
 into its constituent parts.
 If you really want an empty path entry, give yourself a whack with
-the cluestick and then say 'PATH="`showpath %current`":'.
-
-Send new bug reports to <dj3vande@eskimo.com>.
+the cluestick and then say
+.Li PATH="`showpath %current`:" .
+.Pp
+Send new bug reports to 
+.Aq dj3vande@eskimo.com .
